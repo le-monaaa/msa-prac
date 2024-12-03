@@ -4,6 +4,7 @@ import com.sparta.msa_exam.product.domain.AddProductRequest;
 import com.sparta.msa_exam.product.domain.ProductResponse;
 import com.sparta.msa_exam.product.domain.ResponseDto;
 import com.sparta.msa_exam.product.service.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,17 @@ public class ProductController {
     @GetMapping("/validate/{id}")
     public ResponseDto validateProductId(@PathVariable Long id) {
         return productService.validateProductId(id);
+    }
+
+    // 로드밸런서 가중치 테스트
+    @GetMapping("/test")
+    public ResponseEntity<List<ProductResponse>> getProducts(HttpServletRequest request) {
+
+        // 현재 서버 포트를 응답 헤더에 추가
+        String serverPort = String.valueOf(request.getServerPort());
+        return ResponseEntity.ok()
+                .header("Server-Port", serverPort)
+                .body(null);
     }
 
 

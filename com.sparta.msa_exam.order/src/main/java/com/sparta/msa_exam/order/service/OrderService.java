@@ -5,6 +5,7 @@ import com.sparta.msa_exam.order.feign.ProductClient;
 import com.sparta.msa_exam.order.repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -70,6 +71,7 @@ public class OrderService {
     }
 
     // 주문 단건 조회
+    @Cacheable(cacheNames = "orderCache", key="#orderId")
     public ResponseDto getOneOrder(Long orderId) {
         Order order = orderRepository.findById(orderId).orElse(null);
         if(order == null) {
@@ -77,7 +79,7 @@ public class OrderService {
         }
         OrderResponse orderResponse = OrderResponse.builder()
                 .orderId(order.getId())
-                .productIds(order.getProductIds())
+                .productIds(new ArrayList<>(order.getProductIds()))
                 .build();
         return new ResponseDto(ResponseDto.SUCCESS, "주문 조회 성공", orderResponse);
     }
