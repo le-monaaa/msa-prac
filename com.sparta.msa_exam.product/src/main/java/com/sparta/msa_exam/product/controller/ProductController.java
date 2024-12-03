@@ -5,23 +5,22 @@ import com.sparta.msa_exam.product.domain.ProductResponse;
 import com.sparta.msa_exam.product.domain.ResponseDto;
 import com.sparta.msa_exam.product.service.ProductService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/products")
+@AllArgsConstructor
 public class ProductController {
 
     private ProductService productService;
 
     // 상품 추가
     @PostMapping
-    public ResponseDto addProduct(@Valid AddProductRequest request) {
-
+    public ResponseDto addProduct(@Valid @RequestBody AddProductRequest request) {
         ProductResponse response = productService.addProduct(request);
 
         return new ResponseDto(ResponseDto.SUCCESS, "상품 등록 성공", response);
@@ -38,6 +37,17 @@ public class ProductController {
         return new ResponseDto(ResponseDto.SUCCESS, null, products);
     }
 
+    // product ids 유효성 체크
+    @GetMapping("/validate")
+    public ResponseDto validateProductIds(@RequestParam List<Long> productIds) {
+        return productService.validateProductIds(productIds);
+    }
+
+    // product id 단건 유효성 체크
+    @GetMapping("/validate/{id}")
+    public ResponseDto validateProductId(@PathVariable Long id) {
+        return productService.validateProductId(id);
+    }
 
 
 }
