@@ -1,6 +1,7 @@
 package com.sparta.msa_exam.auth.service;
 
-import com.sparta.msa_exam.auth.doma.SignInRequest;
+import com.sparta.msa_exam.auth.domain.SignInRequest;
+import com.sparta.msa_exam.auth.domain.SignUpRequest;
 import com.sparta.msa_exam.auth.domain.ResponseDto;
 import com.sparta.msa_exam.auth.domain.User;
 import com.sparta.msa_exam.auth.repository.UserRepository;
@@ -16,7 +17,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입
-    public ResponseDto signUp(SignInRequest request) {
+    public ResponseDto signUp(SignUpRequest request) {
 
         // username 유효성 체크
         if(userRepository.findByUsername(request.getUsername()).isPresent()) {
@@ -33,4 +34,8 @@ public class UserService {
         return new ResponseDto(ResponseDto.SUCCESS, "회원가입 성공", null);
     }
 
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
+    }
 }

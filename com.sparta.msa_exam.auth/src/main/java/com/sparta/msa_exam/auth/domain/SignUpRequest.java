@@ -1,14 +1,13 @@
-package com.sparta.msa_exam.auth.doma;
+package com.sparta.msa_exam.auth.domain;
 
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @AllArgsConstructor
 @Data
 @Builder
-public class SignInRequest {
+public class SignUpRequest {
 
     @NotBlank
     private String username;
